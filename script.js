@@ -11,6 +11,7 @@ var config = {
     scene: {
         preload: preload,
         create: create,
+        update: update
     }
 };
 
@@ -26,6 +27,15 @@ function preload ()
 
 function create ()
 {
+    this.player={
+        gold: 0,
+        clickDmg:1
+    };
     let background1 = this.add.image(400, 300, 'background1');
    // let coin = this.add.image(400, 300, 'coin');
+}
+
+function update ()
+{
+    this.add.text(300, 300, 'Adventure awaits!', { fontSize: '24px', fill: '#FFF' });
 }
