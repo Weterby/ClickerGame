@@ -23,14 +23,30 @@ function preload ()
     this.load.image('background1', 'src/img/background1.png');
     //specials
     this.load.image('coin', 'src/img/coin.png');
+    //monsters
+    this.load.image('spider', 'src/img/spider.png');
+    this.load.image('bat', 'src/img/bat.png');
+    this.load.image('slime', 'src/img/slime.png');
 }
 
 function create ()
 {
+    let monsterData = [
+        {name: 'Spider', image: 'spider'},
+        {name: 'Bat', image: 'bat'},
+        {name: 'Slime', image: 'slime'}
+    ];
+
+    let backgroundData = [
+        {name: 'Violet Forest', image: 'background1'},
+    ]
+    
     this.player={
         gold: 0,
         clickDmg:1
     };
+
+
     let background1 = this.add.image(400, 300, 'background1');
    // let coin = this.add.image(400, 300, 'coin');
 }
