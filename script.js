@@ -45,6 +45,21 @@ function create ()
         {name: 'Bat', image: 'bat'},
         {name: 'Slime', image: 'slime'}
     ];
+
+    this.monsters = this.add.group();
+    let monster;
+    monsterData.forEach(function(data) {
+        // create a sprite for them off screen
+        monster = state.monsters.create(1000, config.height/2, data.image);
+        // reference to the database
+        monster.details = data;
+
+        //enable input so we can click it!
+        monster.inputEnabled = true;
+        //monster.events.onInputDown.add(state.onClickMonster, state);
+        monster.setInteractive();
+        monster.on('pointerdown', function (pointer){alert("it works")})
+    });
 }
 
 function update ()
