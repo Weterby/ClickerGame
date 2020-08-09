@@ -2,12 +2,6 @@ var config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 200 }
-        }
-    },
     scene: {
         preload: preload,
         create: create,
@@ -15,7 +9,7 @@ var config = {
     }
 };
 
-let game = new Phaser.Game(config);
+var game = new Phaser.Game(config);
 
 function preload ()
 {
@@ -31,24 +25,26 @@ function preload ()
 
 function create ()
 {
-    let monsterData = [
-        {name: 'Spider', image: 'spider'},
-        {name: 'Bat', image: 'bat'},
-        {name: 'Slime', image: 'slime'}
-    ];
+    let state = this;
 
-    let backgroundData = [
-        {name: 'Violet Forest', image: 'background1'},
-    ]
-    
     this.player={
         gold: 0,
         clickDmg:1
     };
 
+    // setup each of our background layers to take the full screen
+    this.background = this.add.group();
+    ['background1'] //need to add several parts of background
+        .forEach(function(image) {
+            let bg = state.add.tileSprite(config.width/2, config.height/2, 0, 0, image, '', state.background);
+            //bg.setTileScale(1,1);
+        });
 
-    let background1 = this.add.image(400, 300, 'background1');
-   // let coin = this.add.image(400, 300, 'coin');
+    let monsterData = [
+        {name: 'Spider', image: 'spider'},
+        {name: 'Bat', image: 'bat'},
+        {name: 'Slime', image: 'slime'}
+    ];
 }
 
 function update ()
