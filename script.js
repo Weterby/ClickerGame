@@ -26,8 +26,8 @@ function preload ()
 function create ()
 {
     let state = this;
-    const WIDTH = config.width/2;
-    const HEIGHT = config.height/2;
+    const centerX = config.width/2;
+    const centerY = config.height/2;
     this.player={
         gold: 0,
         clickDmg:1
@@ -37,7 +37,7 @@ function create ()
     this.background = this.add.group();
     ['background1'] //need to add several parts of background
         .forEach(function(image) {
-            let bg = state.add.tileSprite(WIDTH, HEIGHT, 0, 0, image, '', state.background);
+            let bg = state.add.tileSprite(centerX, centerY, 0, 0, image, '', state.background);
             //bg.setTileScale(1,1);
         });
 
@@ -51,7 +51,7 @@ function create ()
     let monster;
     monsterData.forEach(function(data) {
         // create a sprite for them off screen
-        monster = state.monsters.create(1000, HEIGHT, data.image);
+        monster = state.monsters.create(1000, centerY, data.image);
         // reference to the database
         monster.details = data;
 
@@ -61,6 +61,9 @@ function create ()
         monster.setInteractive();
         // monster.on('pointerdown', function (pointer){alert("it works")})
     });
+
+    this.currentMonster = this.monsters.getChildren()[Phaser.Math.Between(0, this.monsters.getLength())];
+    this.currentMonster.setPosition(centerX+100,centerY);
 }
 
 function update ()
