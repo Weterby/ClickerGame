@@ -1,4 +1,4 @@
-var config = {
+let config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
@@ -8,9 +8,10 @@ var config = {
         update: update
     }
 };
+
 const centerX = config.width/2;
 const centerY = config.height/2;
-var game = new Phaser.Game(config);
+let game = new Phaser.Game(config);
 
 function preload ()
 {
@@ -22,17 +23,16 @@ function preload ()
     this.load.image('spider', 'src/img/spider.png');
     this.load.image('bat', 'src/img/bat.png');
     this.load.image('slime', 'src/img/slime.png');
+    //main character stats
+    this.player={
+        gold: 0,
+        clickDmg:1
+    };
 }
 
 function create ()
 {
     let state = this;
-
-    this.player={
-        gold: 0,
-        clickDmg:1
-    };
-
     // setup each of our background layers to take the full screen
     this.background = this.add.group();
     ['background1'] //need to add several parts of background
@@ -41,16 +41,18 @@ function create ()
             //bg.setTileScale(1,1);
         });
 
+    //monster database
     let monsterData = [
         {name: 'Spider', image: 'spider'},
         {name: 'Bat', image: 'bat'},
         {name: 'Slime', image: 'slime'}
     ];
 
+    //loop trough every monster and setup on scene
     this.monsters = this.add.group();
     let monster;
     monsterData.forEach(function(data) {
-        // create a sprite for them off screen
+        //create a sprite for them off screen
         monster = state.monsters.create(1000, centerY, data.image);
         monster.setScale(1,1);
         //reference to the database
@@ -62,10 +64,7 @@ function create ()
         monster.on('pointerdown', onClickMonster);
     });
 
-    function onClickMonster(){
-
-    }
-
+    //pick random monster from group
     this.currentMonster = this.monsters.getChildren()[Phaser.Math.Between(0, this.monsters.getLength()-1)];
     this.currentMonster.setPosition(centerX,centerY);
 }
@@ -73,8 +72,13 @@ function create ()
 function update ()
 {
     // this.add.text(300, 300, 'Adventure awaits!', { fontSize: '24px', fill: '#FFF' });
+    //add text that describes monster name
     this.add.text(centerX - this.currentMonster.width / 2,
         centerY + this.currentMonster.height / 2,
         this.currentMonster.details.name,
         { fontSize: '24px', fill: '#FFF' });
+}
+
+function onClickMonster(){
+
 }
