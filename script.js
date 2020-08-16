@@ -8,7 +8,8 @@ var config = {
         update: update
     }
 };
-
+const centerX = config.width/2;
+const centerY = config.height/2;
 var game = new Phaser.Game(config);
 
 function preload ()
@@ -26,8 +27,7 @@ function preload ()
 function create ()
 {
     let state = this;
-    const centerX = config.width/2;
-    const centerY = config.height/2;
+
     this.player={
         gold: 0,
         clickDmg:1
@@ -52,21 +52,29 @@ function create ()
     monsterData.forEach(function(data) {
         // create a sprite for them off screen
         monster = state.monsters.create(1000, centerY, data.image);
-        // reference to the database
+        monster.setScale(1,1);
+        //reference to the database
         monster.details = data;
-
-        //enable input so we can click it!
+        //enable input so we can click it
         monster.inputEnabled = true;
-        //monster.events.onInputDown.add(state.onClickMonster, state);
+        //trigger an event on mouse click
         monster.setInteractive();
-        // monster.on('pointerdown', function (pointer){alert("it works")})
+        monster.on('pointerdown', onClickMonster);
     });
 
-    this.currentMonster = this.monsters.getChildren()[Phaser.Math.Between(0, this.monsters.getLength())];
-    this.currentMonster.setPosition(centerX+100,centerY);
+    function onClickMonster(){
+
+    }
+
+    this.currentMonster = this.monsters.getChildren()[Phaser.Math.Between(0, this.monsters.getLength()-1)];
+    this.currentMonster.setPosition(centerX,centerY);
 }
 
 function update ()
 {
-    this.add.text(300, 300, 'Adventure awaits!', { fontSize: '24px', fill: '#FFF' });
+    // this.add.text(300, 300, 'Adventure awaits!', { fontSize: '24px', fill: '#FFF' });
+    this.add.text(centerX - this.currentMonster.width / 2,
+        centerY + this.currentMonster.height / 2,
+        this.currentMonster.details.name,
+        { fontSize: '24px', fill: '#FFF' });
 }
