@@ -50,21 +50,18 @@ class GameScene extends Phaser.Scene {
             {name: 'Bat', image: 'bat'},
             {name: 'Slime', image: 'slime'}
         ];
-
         //loop trough every monster and setup on scene
         this.monsters = this.add.group();
         let monster;
-        monsterData.forEach(function (data) {
+        monsterData.forEach((data) => {
             //create a sprite for them off screen
             monster = state.monsters.create(1000, centerY, data.image);
             monster.setScale(1, 1);
             //reference to the database
             monster.details = data;
             //enable input so we can click it
-            monster.inputEnabled = true;
-            //trigger an event on mouse click
             monster.setInteractive();
-            monster.on('pointerdown', state.onClickMonster);
+            monster.on('pointerup', state.onClickMonster, this);
         });
 
         //pick random monster from group
@@ -72,8 +69,16 @@ class GameScene extends Phaser.Scene {
         this.currentMonster.setPosition(centerX, centerY);
     }
 
+    onClickMonster(){
+        // reset the currentMonster before we move him
+        this.currentMonster.setPosition(1000, centerY);
+        // now pick the next in the list, and bring him up
+        this.currentMonster = this.monsters.getChildren()[Phaser.Math.Between(0, this.monsters.getLength() - 1)];
+        this.currentMonster.setPosition(centerX, centerY);
+    }
+
     update() {
-        // this.add.text(300, 300, 'Adventure awaits!', { fontSize: '24px', fill: '#FFF' });
+
         //add text that describes monster name
         this.add.text(centerX - this.currentMonster.width / 2,
             centerY + this.currentMonster.height / 2,
@@ -81,9 +86,6 @@ class GameScene extends Phaser.Scene {
             {fontSize: '24px', fill: '#FFF'});
     }
 
-    onClickMonster(){
-
-    }
 }
 
 let config = {
