@@ -46,9 +46,9 @@ class GameScene extends Phaser.Scene {
 
         //monster database
         let monsterData = [
-            {name: 'Spider', image: 'spider'},
-            {name: 'Bat', image: 'bat'},
-            {name: 'Slime', image: 'slime'}
+            {name: 'Spider', image: 'spider', maxHealth: 5},
+            {name: 'Bat', image: 'bat', maxHealth: 10},
+            {name: 'Slime', image: 'slime', maxHealth: 15}
         ];
         //loop trough every monster and setup on scene
         this.monsters = this.add.group();
@@ -59,31 +59,43 @@ class GameScene extends Phaser.Scene {
             monster.setScale(1, 1);
             //reference to the database
             monster.details = data;
-            //enable input so we can click it
+            // use the built in health component
+            monster.health = monster.details
+
             monster.setInteractive();
             monster.on('pointerup', state.onClickMonster, this);
         });
 
         //pick random monster from group
         this.currentMonster = this.monsters.getChildren()[Phaser.Math.Between(0, this.monsters.getLength() - 1)];
+        //set his position to the middle so we can see it
         this.currentMonster.setPosition(centerX, centerY);
+        //set current health equal to the its maximum
+        this.currentMonster.health = this.currentMonster.details.maxHealth;
     }
 
     onClickMonster(){
+        this.currentMonster.health-=this.player.clickDmg;
+        if(this.currentMonster.health<=0) this.onKilledMonster();
+        console.log(this.currentMonster.health);
+    }
+
+    onKilledMonster(){
         // reset the currentMonster before we move him
         this.currentMonster.setPosition(1000, centerY);
         // now pick the next in the list, and bring him up
         this.currentMonster = this.monsters.getChildren()[Phaser.Math.Between(0, this.monsters.getLength() - 1)];
+        this.currentMonster.health=this.currentMonster.details.maxHealth
         this.currentMonster.setPosition(centerX, centerY);
     }
 
     update() {
-
         //add text that describes monster name
         this.add.text(centerX - this.currentMonster.width / 2,
             centerY + this.currentMonster.height / 2,
             this.currentMonster.details.name,
             {fontSize: '24px', fill: '#FFF'});
+
     }
 
 }
