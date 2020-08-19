@@ -56,7 +56,7 @@ class GameScene extends Phaser.Scene {
         monsterData.forEach((data) => {
             //create a sprite for them off screen
             monster = state.monsters.create(1000, centerY, data.image);
-            monster.setScale(1, 1);
+            monster.setScale(3, 3);
             //reference to the database
             monster.details = data;
             // use the built in health component
@@ -72,10 +72,22 @@ class GameScene extends Phaser.Scene {
         this.currentMonster.setPosition(centerX, centerY);
         //set current health equal to the its maximum
         this.currentMonster.health = this.currentMonster.details.maxHealth;
+
+        this.monsterNameText = this.add.text(0, 0, this.currentMonster.details.name, {
+            font: '48px Arial Black',
+            fill: '#fff',
+            strokeThickness: 2
+        });
+        this.monsterHealthText = this.add.text(0, 80, this.currentMonster.health + ' HP', {
+            font: '32px Arial Black',
+            fill: '#ff0000',
+            strokeThickness: 2
+        });
     }
 
     onClickMonster(){
         this.currentMonster.health-=this.player.clickDmg;
+        this.monsterHealthText.text=this.currentMonster.health+ ' HP';
         if(this.currentMonster.health<=0) this.onKilledMonster();
         console.log(this.currentMonster.health);
     }
@@ -87,15 +99,18 @@ class GameScene extends Phaser.Scene {
         this.currentMonster = this.monsters.getChildren()[Phaser.Math.Between(0, this.monsters.getLength() - 1)];
         this.currentMonster.health=this.currentMonster.details.maxHealth
         this.currentMonster.setPosition(centerX, centerY);
+
+        this.monsterNameText.text=this.currentMonster.details.name;
+        this.monsterHealthText.text=this.currentMonster.health + ' HP';
     }
 
     update() {
         //add text that describes monster name
-        this.add.text(centerX - this.currentMonster.width / 2,
-            centerY + this.currentMonster.height / 2,
-            this.currentMonster.details.name,
-            {fontSize: '24px', fill: '#FFF'});
-
+    //     this.add.text(centerX - this.currentMonster.width / 2,
+    //         centerY + this.currentMonster.height / 2,
+    //         this.currentMonster.details.name,
+    //         {fontSize: '24px', fill: '#FFF'});
+    //
     }
 
 }
