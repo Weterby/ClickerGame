@@ -83,13 +83,16 @@ class GameScene extends Phaser.Scene {
             fill: '#ff0000',
             strokeThickness: 2
         });
+
     }
 
     onClickMonster(){
         this.currentMonster.health-=this.player.clickDmg;
         this.monsterHealthText.text=this.currentMonster.health+ ' HP';
+        this.dmgTextTween();
         if(this.currentMonster.health<=0) this.onKilledMonster();
         console.log(this.currentMonster.health);
+
     }
 
     onKilledMonster(){
@@ -102,6 +105,24 @@ class GameScene extends Phaser.Scene {
 
         this.monsterNameText.text=this.currentMonster.details.name;
         this.monsterHealthText.text=this.currentMonster.health + ' HP';
+    }
+
+    dmgTextTween(){
+        let dmgText = this.add.text(this.input.mousePointer.x,
+            this.input.mousePointer.y,
+            this.player.clickDmg,
+            {font: '64px Arial Black',
+            fill: '#fff',
+            strokeThickness: 4});
+        this.tweens.add({
+            targets:dmgText,
+            y:this.input.mousePointer.y-300,
+            duration:3000,
+            ease:'Power1',
+            onComplete: () =>{
+                dmgText.destroy();
+            }
+        })
     }
 
     update() {
