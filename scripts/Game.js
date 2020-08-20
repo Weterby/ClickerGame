@@ -111,13 +111,14 @@ class GameScene extends Phaser.Scene {
         let dmgText = this.add.text(this.input.mousePointer.x,
             this.input.mousePointer.y,
             this.player.clickDmg,
-            {font: '64px Arial Black',
+            {font: '32px Arial Black',
             fill: '#fff',
             strokeThickness: 4});
         this.tweens.add({
             targets:dmgText,
-            y:this.input.mousePointer.y-300,
-            duration:3000,
+            y:this.input.mousePointer.y-100,
+            alpha: { from: 1, to: 0 },
+            duration:500,
             ease:'Power1',
             onComplete: () =>{
                 dmgText.destroy();
