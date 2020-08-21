@@ -141,17 +141,24 @@ class GameScene extends Phaser.Scene {
                     y: { value: centerY-Phaser.Math.Between(50,150), duration: 500, ease: 'Power1', yoyo: true },
                     alpha: { from: 0, to: 1, duration:1000 }
                 },
+                onComplete: () => {image.setInteractive();}
             });
+
+            image.on('pointerover',() =>{
+                image.active=false;
+                this.tweens.add({
+                    targets:image,
+                    alpha: { from: 1, to: 0 },
+                    duration: 200,
+                    onComplete: () =>{
+                        image.destroy();
+                    }
+                })
+            },this)
         }
     }
 
     update() {
-        //add text that describes monster name
-    //     this.add.text(centerX - this.currentMonster.width / 2,
-    //         centerY + this.currentMonster.height / 2,
-    //         this.currentMonster.details.name,
-    //         {fontSize: '24px', fill: '#FFF'});
-    //
     }
 
 }
