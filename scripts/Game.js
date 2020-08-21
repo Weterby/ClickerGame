@@ -9,8 +9,10 @@ class BootScene extends Phaser.Scene {
     preload() {
         //backgrounds
         this.load.image('background1', 'src/img/background1.png');
-        //specials
+        //currency
         this.load.image('coin', 'src/img/coin.png');
+        this.load.image('diamond', 'src/img/diamond.png');
+        this.load.image('ingot', 'src/img/gold_ingots.png');
         //monsters
         this.load.image('spider', 'src/img/spider.png');
         this.load.image('bat', 'src/img/bat.png');
@@ -43,7 +45,8 @@ class GameScene extends Phaser.Scene {
                 let bg = state.add.tileSprite(centerX, centerY, 0, 0, image, '', state.background);
                 //bg.setTileScale(1,1);
             });
-
+        //currency database
+        this.currencyData = ['ingot','coin','diamond'];
         //monster database
         let monsterData = [
             {name: 'Spider', image: 'spider', maxHealth: 5},
@@ -102,7 +105,7 @@ class GameScene extends Phaser.Scene {
         this.currentMonster = this.monsters.getChildren()[Phaser.Math.Between(0, this.monsters.getLength() - 1)];
         this.currentMonster.health=this.currentMonster.details.maxHealth
         this.currentMonster.setPosition(centerX, centerY);
-
+        this.currencyDrop();
         this.monsterNameText.text=this.currentMonster.details.name;
         this.monsterHealthText.text=this.currentMonster.health + ' HP';
     }
@@ -124,6 +127,22 @@ class GameScene extends Phaser.Scene {
                 dmgText.destroy();
             }
         })
+    }
+
+    currencyDrop(){
+        for(let i=0;i<3;i++){
+            let random = this.currencyData[Phaser.Math.Between(0, this.currencyData.length - 1)];
+            let image = this.add.image(centerX, centerY+75, random);
+            image.setScale(0.7);
+            this.tweens.add({
+                targets: image,
+                props: {
+                    x: { value: centerX+Phaser.Math.Between(-200,200), duration: 1000, ease: 'Power1' },
+                    y: { value: centerY-Phaser.Math.Between(50,150), duration: 500, ease: 'Power1', yoyo: true },
+                    alpha: { from: 0, to: 1, duration:1000 }
+                },
+            });
+        }
     }
 
     update() {
