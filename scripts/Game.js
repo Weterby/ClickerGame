@@ -86,6 +86,11 @@ class GameScene extends Phaser.Scene {
             fill: '#ff0000',
             strokeThickness: 2
         });
+        this.goldText = this.add.text(0, 160, 'Gold: '+this.player.gold, {
+            font: '24px Arial Black',
+            fill: '#f6c446',
+
+        });
 
     }
 
@@ -105,7 +110,7 @@ class GameScene extends Phaser.Scene {
         this.currentMonster = this.monsters.getChildren()[Phaser.Math.Between(0, this.monsters.getLength() - 1)];
         this.currentMonster.health=this.currentMonster.details.maxHealth
         this.currentMonster.setPosition(centerX, centerY);
-        this.currencyDrop();
+        this.goldDrop();
         this.monsterNameText.text=this.currentMonster.details.name;
         this.monsterHealthText.text=this.currentMonster.health + ' HP';
     }
@@ -129,7 +134,7 @@ class GameScene extends Phaser.Scene {
         })
     }
 
-    currencyDrop(){
+    goldDrop(){
         for(let i=0;i<3;i++){
             let random = this.currencyData[Phaser.Math.Between(0, this.currencyData.length - 1)];
             let image = this.add.image(centerX, centerY+75, random);
@@ -150,12 +155,17 @@ class GameScene extends Phaser.Scene {
                     targets:image,
                     alpha: { from: 1, to: 0 },
                     duration: 200,
-                    onComplete: () =>{
-                        image.destroy();
-                    }
+                    onComplete: this.onCoinHover(image)
                 })
             },this)
         }
+    }
+
+    onCoinHover(image){
+        image.destroy();
+        this.player.gold++;
+        // console.log(this.player.gold);
+        this.goldText.text='Gold: ' + this.player.gold;
     }
 
     update() {
