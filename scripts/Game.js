@@ -76,21 +76,22 @@ class GameScene extends Phaser.Scene {
         //set current health equal to the its maximum
         this.currentMonster.health = this.currentMonster.details.maxHealth;
 
-        this.monsterNameText = this.add.text(0, 0, this.currentMonster.details.name, {
+        this.monsterNameText = this.add.text(centerX, 30, this.currentMonster.details.name, {
             font: '48px Arial Black',
             fill: '#fff',
             strokeThickness: 2
-        });
-        this.monsterHealthText = this.add.text(0, 80, this.currentMonster.health + ' HP', {
+        }).setOrigin(0.5);
+        this.monsterHealthText = this.add.text(centerX, 80, this.currentMonster.health + ' HP', {
             font: '32px Arial Black',
             fill: '#ff0000',
             strokeThickness: 2
-        });
-        this.goldText = this.add.text(0, 160, 'Gold: '+this.player.gold, {
+        }).setOrigin(0.5);
+        this.goldText = this.add.text(0, 0, 'Gold: '+this.player.gold, {
             font: '24px Arial Black',
             fill: '#f6c446',
-
         });
+
+        // let rect = this.add.rectangle(0, 400, 300, 300, '#FFFFFF');
 
     }
 
@@ -100,6 +101,7 @@ class GameScene extends Phaser.Scene {
         this.dmgTextTween();
         if(this.currentMonster.health<=0) this.onKilledMonster();
         console.log(this.currentMonster.health);
+
 
     }
 
@@ -138,7 +140,7 @@ class GameScene extends Phaser.Scene {
         for(let i=0;i<3;i++){
             let random = this.currencyData[Phaser.Math.Between(0, this.currencyData.length - 1)];
             let image = this.add.image(centerX, centerY+75, random);
-            image.setScale(0.7);
+            // image.setScale(0.5);
             this.tweens.add({
                 targets: image,
                 props: {
@@ -149,24 +151,23 @@ class GameScene extends Phaser.Scene {
                 onComplete: () => {image.setInteractive();}
             });
 
-            image.on('pointerover',() =>{
+            image.on('pointerover', () =>{
                 image.active=false;
                 this.tweens.add({
                     targets:image,
                     alpha: { from: 1, to: 0 },
                     duration: 200,
-                    onComplete: this.onCoinHover(image)
+                    onComplete: () =>{
+                        image.destroy();
+                        this.player.gold++;
+                        // console.log(this.player.gold);
+                        this.goldText.text='Gold: ' + this.player.gold;
+                    }
                 })
             },this)
         }
     }
 
-    onCoinHover(image){
-        image.destroy();
-        this.player.gold++;
-        // console.log(this.player.gold);
-        this.goldText.text='Gold: ' + this.player.gold;
-    }
 
     update() {
     }
@@ -180,7 +181,8 @@ let config = {
     scene: [
         BootScene,
         GameScene
-    ]
+    ],
+    pixelArt: true,
 };
 let game = new Phaser.Game(config);
 
