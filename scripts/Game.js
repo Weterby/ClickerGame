@@ -38,7 +38,7 @@ class GameScene extends Phaser.Scene {
             gold: 0,
             clickDmg: 1
         };
-        // setup each of our background layers to take the full screen
+        // setup each of background layers to take the full screen
         this.background = this.add.group();
         ['background1'] //need to add several parts of background
             .forEach(function (image) {
@@ -53,7 +53,7 @@ class GameScene extends Phaser.Scene {
             {name: 'Bat', image: 'bat', maxHealth: 10},
             {name: 'Slime', image: 'slime', maxHealth: 15}
         ];
-        //loop trough every monster and setup on scene
+        //loop trough every monster and setup it on scene
         this.monsters = this.add.group();
         let monster;
         monsterData.forEach((data) => {
@@ -62,9 +62,9 @@ class GameScene extends Phaser.Scene {
             monster.setScale(3, 3);
             //reference to the database
             monster.details = data;
-            // use the built in health component
+            //use the built in health component
             monster.health = monster.details
-
+            //make the sprite interactive
             monster.setInteractive();
             monster.on('pointerup', state.onClickMonster, this);
         });
@@ -75,36 +75,45 @@ class GameScene extends Phaser.Scene {
         this.currentMonster.setPosition(centerX, centerY);
         //set current health equal to the its maximum
         this.currentMonster.health = this.currentMonster.details.maxHealth;
-
+        //set monster name text
         this.monsterNameText = this.add.text(centerX, 30, this.currentMonster.details.name, {
             font: '48px Arial Black',
             fill: '#fff',
             strokeThickness: 2
         }).setOrigin(0.5);
+        //set monster health text
         this.monsterHealthText = this.add.text(centerX, 80, this.currentMonster.health + ' HP', {
             font: '32px Arial Black',
             fill: '#ff0000',
             strokeThickness: 2
         }).setOrigin(0.5);
+        //set monster gold text
         this.goldText = this.add.text(0, 0, 'Gold: '+this.player.gold, {
             font: '24px Arial Black',
             fill: '#f6c446',
         });
 
-        // let rect = this.add.rectangle(0, 400, 300, 300, '#FFFFFF');
+        let rect = this.add.rectangle(0, 100, 250, 400, '#FFFFFF').setOrigin(0, 0);
+        this.tweens.add({
+            targets:rect,
+            x: 600,
+            duration:3000,
+            yoyo:true
+        })
 
+         this.upgradeMenu = this.add.container(400,300);
     }
 
+    //method that trigger when monster is clicked
     onClickMonster(){
         this.currentMonster.health-=this.player.clickDmg;
         this.monsterHealthText.text=this.currentMonster.health+ ' HP';
         this.dmgTextTween();
         if(this.currentMonster.health<=0) this.onKilledMonster();
         console.log(this.currentMonster.health);
-
-
     }
 
+    //method that trigger when monster is killed
     onKilledMonster(){
         // reset the currentMonster before we move him
         this.currentMonster.setPosition(1000, centerY);
@@ -117,6 +126,7 @@ class GameScene extends Phaser.Scene {
         this.monsterHealthText.text=this.currentMonster.health + ' HP';
     }
 
+    //dmg text animation
     dmgTextTween(){
         let dmgText = this.add.text(this.input.mousePointer.x,
             this.input.mousePointer.y,
@@ -168,10 +178,8 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-
     update() {
     }
-
 }
 
 let config = {
