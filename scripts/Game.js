@@ -13,6 +13,9 @@ class BootScene extends Phaser.Scene {
         this.load.image('coin', 'src/img/coin.png');
         this.load.image('diamond', 'src/img/diamond.png');
         this.load.image('ingot', 'src/img/gold_ingots.png');
+        //upgrade menu
+        this.load.image('menu-arrow', 'src/img/arrow.png');
+        this.load.image('glove1', 'src/img/glove1.png');
         //monsters
         this.load.image('spider', 'src/img/spider.png');
         this.load.image('bat', 'src/img/bat.png');
@@ -90,18 +93,33 @@ class GameScene extends Phaser.Scene {
         //set monster gold text
         this.goldText = this.add.text(0, 0, 'Gold: '+this.player.gold, {
             font: '24px Arial Black',
-            fill: '#f6c446',
+            fill: '#f6d561',
         });
 
-        let rect = this.add.rectangle(0, 100, 250, 400, '#FFFFFF').setOrigin(0, 0);
-        this.tweens.add({
-            targets:rect,
-            x: 600,
-            duration:3000,
-            yoyo:true
+        let rect = this.add.rectangle(0, 0, 250, 400, '#FFFFFF').setOrigin(0, 0);
+        rect.fillAlpha=0.3;
+        rect.setStrokeStyle(3, 0x6d54cb);
+
+        this.upgradeMenu = this.add.container(0,100);
+
+        this.isMenuShown = true;
+        let gloveSprite = this.add.image(0,0,'glove1').setOrigin(0,0).setScale(2);
+        let arrowMenu = this.add.image(250+32,32,'menu-arrow');
+        arrowMenu.setInteractive();
+        arrowMenu.on('pointerup',()=>{
+            let xValue;
+            if(this.isMenuShown) {xValue=-250; this.isMenuShown=false;}
+            else {xValue=0; this.isMenuShown=true;}
+            this.tweens.add({
+                targets: this.upgradeMenu,
+                x:xValue,
+                duration:1000
+            })
         })
 
-         this.upgradeMenu = this.add.container(400,300);
+        this.upgradeMenu.add(gloveSprite);
+        this.upgradeMenu.add(arrowMenu);
+        this.upgradeMenu.add(rect);
     }
 
     //method that trigger when monster is clicked
