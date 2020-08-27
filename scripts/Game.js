@@ -202,6 +202,7 @@ class GameScene extends Phaser.Scene {
 
 let config = {
     type: Phaser.AUTO,
+    parent: 'trtt',
     width: 800,
     height: 600,
     scene: [
@@ -209,6 +210,7 @@ let config = {
         GameScene
     ],
     pixelArt: true,
+    domCreateContainer: true
 };
 let game = new Phaser.Game(config);
 
