@@ -202,7 +202,7 @@ class GameScene extends Phaser.Scene {
 
 let config = {
     type: Phaser.AUTO,
-    parent: 'trtt',
+    parent: 'main-window',
     width: 800,
     height: 600,
     scene: [
