@@ -4,13 +4,13 @@
 body{
     margin:0;
 }
+
 .container{
     display: grid;
+    grid-template-columns: 20% 60% 20%;
+    grid-template-rows: 20% 60% 20%;
     height: 100vh;
-    padding:5%;
     grid-gap: 10px;
-    grid-template-columns: auto;
-    grid-template-rows: auto;
     grid-template-areas:
     "header header header"
     "left center right"
@@ -29,6 +29,7 @@ body{
 
 #main-window{
     grid-area: center;
+    margin: auto;
 }
 
 .right-sidebar{
@@ -41,4 +42,22 @@ body{
 
 .footer,.right-sidebar,.left-sidebar,.header{
     border: 2px solid black;
+}
+canvas{
+}
+
+@media only screen and (max-width: 1366px) {
+    .container{
+        display: grid;
+        height: 100vh;
+        grid-gap: 10px;
+        grid-template-columns: auto;
+        grid-template-rows: auto;
+        grid-template-areas:
+        "header header"
+        "center center"
+        "left right"
+        "footer footer";
+        border: 1px solid red;
+    }
 }

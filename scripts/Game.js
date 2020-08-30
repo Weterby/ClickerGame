@@ -210,7 +210,6 @@ let config = {
         GameScene
     ],
     pixelArt: true,
-    domCreateContainer: true
 };
 let game = new Phaser.Game(config);
 
