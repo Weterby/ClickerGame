@@ -3,7 +3,14 @@
 }
 body{
     margin:0;
+    font-family: RubberB;
 }
+
+@font-face {
+    font-family: RubberB;
+    src: url(src/fonts/RUBBBB__.TTF);
+} /*Rubber Biscuit font (RubberB) */
+
 .header{
     grid-area: header;
 }
@@ -12,11 +19,13 @@ body{
 }
 #main-window{
     grid-area: center;
-    margin:auto;
+    place-self: center;
 }
 .right-sidebar{
     grid-area: right;
+    text-align: right;
 }
+
 .footer{
     grid-area: footer;
 }
@@ -26,8 +35,8 @@ body{
 
 .container{
     display: grid;
-    grid-template-columns: 19.5% 60% 19.5%;
-    grid-template-rows: 14% 70% 14%;
+    grid-template-columns: 19.5% auto 19.5%;
+    grid-template-rows: 14% auto 14%;
     grid-gap: 10px;
     grid-template-areas:
         "header header header"
@@ -38,6 +47,16 @@ body{
     padding: 10px;
     border: 1px solid red;
     overflow: hidden;
+
+    background: rgb(136,85,156);
+    background: linear-gradient(180deg, rgba(136,85,156,1) 0%, rgba(144,89,164,1) 30%, rgba(148,95,169,1) 52%, rgba(98,51,117,1) 88%, rgba(91,47,108,1) 100%);
+}
+canvas{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.24), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+h1{
+    padding:10px;
 }
 
 @media only screen and (max-width: 1366px) {
