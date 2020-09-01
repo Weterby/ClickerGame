@@ -1,3 +1,4 @@
+
 class BootScene extends Phaser.Scene {
     constructor() {
         super({
@@ -33,13 +34,26 @@ class GameScene extends Phaser.Scene {
             key: 'GameScene',
         });
     }
-    
+
+
     create() {
+        this.H_GOLD = document.getElementById("GOLD");
+        this.H_DIAMONDS = document.getElementById("DIAMONDS");
+        this.H_DMG = document.getElementById("DMG");
+        this.H_DPS = document.getElementById("DPS");
+        this.H_KILLS = document.getElementById("KILLS");
+        this.H_CLICKS = document.getElementById("CLICKS");
+        this.H_TOTALGOLD = document.getElementById("TOTALGOLD");
         let state = this;
         //main character stats
         this.player = {
             gold: 0,
-            clickDmg: 1
+            diamonds: 0,
+            clickDmg: 1,
+            clickDps: 0,
+            kills: 0,
+            clicks: 0,
+            totalGold: 0
         };
         // setup each of background layers to take the full screen
         this.background = this.add.group();
@@ -91,10 +105,10 @@ class GameScene extends Phaser.Scene {
             strokeThickness: 2
         }).setOrigin(0.5);
         //set monster gold text
-        this.goldText = this.add.text(0, 0, 'Gold: '+this.player.gold, {
-            font: '24px Arial Black',
-            fill: '#f6d561',
-        });
+        // this.goldText = this.add.text(0, 0, 'Gold: '+this.player.gold, {
+        //     font: '24px Arial Black',
+        //     fill: '#f6d561',
+        // });
 
         let rect = this.add.rectangle(0, 0, 250, 400, '#FFFFFF').setOrigin(0, 0);
         rect.fillAlpha=0.3;
@@ -129,6 +143,9 @@ class GameScene extends Phaser.Scene {
         this.dmgTextTween();
         if(this.currentMonster.health<=0) this.onKilledMonster();
         console.log(this.currentMonster.health);
+
+        this.player.clicks++;
+        this.H_CLICKS.innerHTML=this.player.clicks+' :Clicks';
     }
 
     //method that trigger when monster is killed
@@ -142,6 +159,9 @@ class GameScene extends Phaser.Scene {
         this.goldDrop();
         this.monsterNameText.text=this.currentMonster.details.name;
         this.monsterHealthText.text=this.currentMonster.health + ' HP';
+
+        this.player.kills++;
+        this.H_KILLS.innerHTML=this.player.kills+' :Kills';
     }
 
     //dmg text animation
@@ -188,8 +208,10 @@ class GameScene extends Phaser.Scene {
                     onComplete: () =>{
                         image.destroy();
                         this.player.gold++;
+                        this.player.totalGold++;
                         // console.log(this.player.gold);
-                        this.goldText.text='Gold: ' + this.player.gold;
+                        this.H_GOLD.innerHTML='Gold: ' + this.player.gold;
+                        this.H_TOTALGOLD.innerHTML=this.player.totalGold+' :Total gold';
                     }
                 })
             },this)
