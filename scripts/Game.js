@@ -54,7 +54,11 @@ class GameScene extends Phaser.Scene {
                 //bg.setTileScale(1,1);
             });
         //currency database
-        this.currencyData = ['ingot','coin','diamond'];
+        this.currencyData = [
+            {name: 'Gold', image: 'coin', type: 'gold'},
+            {name: 'Ingot', image: 'ingot', type: 'gold'},
+            {name: 'Diamond', image: 'diamond', type: 'diamond'}
+            ];
         //monster database
         let monsterData = [
             {name: 'Spider', image: 'spider', maxHealth: 5},
@@ -95,7 +99,7 @@ class GameScene extends Phaser.Scene {
         this.monsterHealthText.text=this.currentMonster.health+ ' HP';
         this.dmgTextTween();
         if(this.currentMonster.health<=0) this.onKilledMonster();
-        console.log(this.currentMonster.health);
+        // console.log(this.currentMonster.health);
         //statistics
         this.player.clicks++;
     }
@@ -136,30 +140,38 @@ class GameScene extends Phaser.Scene {
     }
 
     goldDrop(){
-        for(let i=0;i<3;i++){
+        for(let i=0;i<3;i++) {
             let random = this.currencyData[Phaser.Math.Between(0, this.currencyData.length - 1)];
-            let image = this.add.image(centerX, centerY+75, random);
+            let image = this.add.image(centerX, centerY + 75, random.image);
             // image.setScale(0.5);
             this.tweens.add({
                 targets: image,
                 props: {
-                    x: { value: centerX+Phaser.Math.Between(-200,200), duration: 1000, ease: 'Power1' },
-                    y: { value: centerY-Phaser.Math.Between(50,150), duration: 500, ease: 'Power1', yoyo: true },
-                    alpha: { from: 0, to: 1, duration:1000 }
+                    x: {value: centerX + Phaser.Math.Between(-200, 200), duration: 1000, ease: 'Power1'},
+                    y: {value: centerY - Phaser.Math.Between(50, 150), duration: 500, ease: 'Power1', yoyo: true},
+                    alpha: {from: 0, to: 1, duration: 1000}
                 },
-                onComplete: () => {image.setInteractive();}
+                onComplete: () => {
+                    image.setInteractive();
+                }
             });
 
-            image.on('pointerover', () =>{
-                image.active=false;
+            image.on('pointerover', () => {
+                image.disableInteractive();
                 this.tweens.add({
-                    targets:image,
-                    alpha: { from: 1, to: 0 },
+                    targets: image,
+                    alpha: {from: 1, to: 0},
                     duration: 200,
-                    onComplete: () =>{
+                    onComplete: () => {
+                        console.log(random);
                         image.destroy();
-                        this.player.gold++;
-                        this.player.totalGold++;
+                        if (random.type === 'gold') {
+                            this.player.gold++;
+                            this.player.totalGold++;
+                        }
+                        if (random.type === 'diamond') {
+                            this.player.diamonds++;
+                        }
                         // console.log(this.player.gold);
                     }
                 })
@@ -195,6 +207,7 @@ class GameScene extends Phaser.Scene {
     }
 
     createMonsterInfo(){
+        //set monster name text
         this.monsterNameText = this.add.text(centerX, 30, this.currentMonster.details.name, {
             font: '48px Arial Black',
             fill: '#fff',
@@ -213,6 +226,7 @@ class GameScene extends Phaser.Scene {
         H_KILLS.innerHTML=this.player.kills+' :Kills';
         H_GOLD.innerHTML='Gold: ' + this.player.gold;
         H_TOTALGOLD.innerHTML=this.player.totalGold+' :Total gold';
+        H_DIAMONDS.innerHTML='Diamonds: ' + this.player.diamonds;
     }
 }
 
