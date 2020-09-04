@@ -1,4 +1,3 @@
-
 class BootScene extends Phaser.Scene {
     constructor() {
         super({
@@ -27,7 +26,6 @@ class BootScene extends Phaser.Scene {
         this.scene.start('GameScene');
     }
 }
-
 class GameScene extends Phaser.Scene {
     constructor() {
         super({
@@ -35,17 +33,10 @@ class GameScene extends Phaser.Scene {
         });
     }
 
-
     create() {
-        this.H_GOLD = document.getElementById("GOLD");
-        this.H_DIAMONDS = document.getElementById("DIAMONDS");
-        this.H_DMG = document.getElementById("DMG");
-        this.H_DPS = document.getElementById("DPS");
-        this.H_KILLS = document.getElementById("KILLS");
-        this.H_CLICKS = document.getElementById("CLICKS");
-        this.H_TOTALGOLD = document.getElementById("TOTALGOLD");
+        //assign 'this' to variable so we can use it in nested functions
         let state = this;
-        //main character stats
+        //initialize main character stats
         this.player = {
             gold: 0,
             diamonds: 0,
@@ -92,48 +83,10 @@ class GameScene extends Phaser.Scene {
         this.currentMonster.setPosition(centerX, centerY);
         //set current health equal to the its maximum
         this.currentMonster.health = this.currentMonster.details.maxHealth;
-        //set monster name text
-        this.monsterNameText = this.add.text(centerX, 30, this.currentMonster.details.name, {
-            font: '48px Arial Black',
-            fill: '#fff',
-            strokeThickness: 2
-        }).setOrigin(0.5);
-        //set monster health text
-        this.monsterHealthText = this.add.text(centerX, 80, this.currentMonster.health + ' HP', {
-            font: '32px Arial Black',
-            fill: '#ff0000',
-            strokeThickness: 2
-        }).setOrigin(0.5);
-        //set monster gold text
-        // this.goldText = this.add.text(0, 0, 'Gold: '+this.player.gold, {
-        //     font: '24px Arial Black',
-        //     fill: '#f6d561',
-        // });
 
-        let rect = this.add.rectangle(0, 0, 250, 400, '#FFFFFF').setOrigin(0, 0);
-        rect.fillAlpha=0.3;
-        rect.setStrokeStyle(3, 0x6d54cb);
+        this.createUpgradeMenu();
+        this.createMonsterInfo();
 
-        this.upgradeMenu = this.add.container(0,100);
-
-        this.isMenuShown = true;
-        let gloveSprite = this.add.image(0,0,'glove1').setOrigin(0,0).setScale(2);
-        let arrowMenu = this.add.image(250+32,32,'menu-arrow');
-        arrowMenu.setInteractive();
-        arrowMenu.on('pointerup',()=>{
-            let xValue;
-            if(this.isMenuShown) {xValue=-250; this.isMenuShown=false;}
-            else {xValue=0; this.isMenuShown=true;}
-            this.tweens.add({
-                targets: this.upgradeMenu,
-                x:xValue,
-                duration:1000
-            })
-        })
-
-        this.upgradeMenu.add(gloveSprite);
-        this.upgradeMenu.add(arrowMenu);
-        this.upgradeMenu.add(rect);
     }
 
     //method that trigger when monster is clicked
@@ -143,9 +96,8 @@ class GameScene extends Phaser.Scene {
         this.dmgTextTween();
         if(this.currentMonster.health<=0) this.onKilledMonster();
         console.log(this.currentMonster.health);
-
+        //statistics
         this.player.clicks++;
-        this.H_CLICKS.innerHTML=this.player.clicks+' :Clicks';
     }
 
     //method that trigger when monster is killed
@@ -159,9 +111,8 @@ class GameScene extends Phaser.Scene {
         this.goldDrop();
         this.monsterNameText.text=this.currentMonster.details.name;
         this.monsterHealthText.text=this.currentMonster.health + ' HP';
-
+        //statistics
         this.player.kills++;
-        this.H_KILLS.innerHTML=this.player.kills+' :Kills';
     }
 
     //dmg text animation
@@ -210,15 +161,58 @@ class GameScene extends Phaser.Scene {
                         this.player.gold++;
                         this.player.totalGold++;
                         // console.log(this.player.gold);
-                        this.H_GOLD.innerHTML='Gold: ' + this.player.gold;
-                        this.H_TOTALGOLD.innerHTML=this.player.totalGold+' :Total gold';
                     }
                 })
-            },this)
+            })
         }
     }
 
+    createUpgradeMenu(){
+        let rect = this.add.rectangle(0, 0, 250, 400, '#FFFFFF').setOrigin(0, 0);
+        rect.fillAlpha=0.3;
+        rect.setStrokeStyle(3, 0x6d54cb);
+
+        this.upgradeMenu = this.add.container(0,100);
+
+        this.isMenuShown = true;
+        let gloveSprite = this.add.image(0,0,'glove1').setOrigin(0,0).setScale(2);
+        let arrowMenu = this.add.image(250+32,32,'menu-arrow');
+        arrowMenu.setInteractive();
+        arrowMenu.on('pointerup',()=>{
+            let xValue;
+            if(this.isMenuShown) {xValue=-250; this.isMenuShown=false;}
+            else {xValue=0; this.isMenuShown=true;}
+            this.tweens.add({
+                targets: this.upgradeMenu,
+                x:xValue,
+                duration:1000
+            })
+        })
+
+        this.upgradeMenu.add(gloveSprite);
+        this.upgradeMenu.add(arrowMenu);
+        this.upgradeMenu.add(rect);
+    }
+
+    createMonsterInfo(){
+        this.monsterNameText = this.add.text(centerX, 30, this.currentMonster.details.name, {
+            font: '48px Arial Black',
+            fill: '#fff',
+            strokeThickness: 2
+        }).setOrigin(0.5);
+        //set monster health text
+        this.monsterHealthText = this.add.text(centerX, 80, this.currentMonster.health + ' HP', {
+            font: '32px Arial Black',
+            fill: '#ff0000',
+            strokeThickness: 2
+        }).setOrigin(0.5);
+    }
+
     update() {
+        H_CLICKS.innerHTML=this.player.clicks+' :Clicks';
+        H_KILLS.innerHTML=this.player.kills+' :Kills';
+        H_GOLD.innerHTML='Gold: ' + this.player.gold;
+        H_TOTALGOLD.innerHTML=this.player.totalGold+' :Total gold';
     }
 }
 
