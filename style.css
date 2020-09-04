@@ -4,6 +4,7 @@
 body{
     margin:0;
     font-family: RubberB;
+    cursor: url("src/cursor/swordCursor.png"), auto;
 }
 
 @font-face {
@@ -11,6 +12,7 @@ body{
     src: url(src/fonts/RUBBBB__.TTF);
 } /*Rubber Biscuit font (RubberB) */
 
+/*grid items*/
 .header{
     grid-area: header;
 }
@@ -25,10 +27,10 @@ body{
     grid-area: right;
     text-align: right;
 }
-
 .footer{
     grid-area: footer;
 }
+
 .footer,.right-sidebar,.left-sidebar,.header{
     border: 2px solid black;
 }
